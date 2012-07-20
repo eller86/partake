@@ -1,0 +1,9 @@
+language: scala
+scala:
+  - 2.9.2
+jdk:
+  - oraclejdk7
+notifications:
+  email:
+    recipients:
+      - skypencil+travis.ci@gmail.com
