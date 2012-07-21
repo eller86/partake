@@ -2,8 +2,8 @@ package in.partake.controller.api.account;
 
 import in.partake.controller.api.APIControllerTest;
 import in.partake.model.fixture.TestDataProvider;
-import net.sf.json.JSONObject;
 
+import org.codehaus.jackson.node.ObjectNode;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ public class SessionAPITest extends APIControllerTest {
         proxy.execute();
         assertResultOK(proxy);
 
-        JSONObject obj = getJSON(proxy);
+        ObjectNode obj = getJSON(proxy);
         Assert.assertNotNull(obj.get("token"));
     }
 
@@ -34,7 +34,7 @@ public class SessionAPITest extends APIControllerTest {
         proxy.execute();
         assertResultOK(proxy);
 
-        JSONObject obj = getJSON(proxy);
+        ObjectNode obj = getJSON(proxy);
         Assert.assertNotNull(obj.get("token"));
     }
 

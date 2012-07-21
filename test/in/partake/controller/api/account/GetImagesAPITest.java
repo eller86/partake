@@ -2,14 +2,14 @@ package in.partake.controller.api.account;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
+import in.partake.controller.ActionProxy;
 import in.partake.controller.api.APIControllerTest;
 import in.partake.model.fixture.TestDataProvider;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ObjectNode;
 import org.junit.Test;
-
-import in.partake.controller.ActionProxy;
 
 public class GetImagesAPITest extends APIControllerTest {
 
@@ -22,12 +22,13 @@ public class GetImagesAPITest extends APIControllerTest {
 
         assertResultOK(proxy);
 
-        JSONObject obj = getJSON(proxy);
+        ObjectNode obj = getJSON(proxy);
 
-        assertThat(obj.getInt("count"), is(10));
-        JSONArray ids = obj.getJSONArray("imageIds");
+        assertThat(obj.get("count").asInt(), is(10));
+        JsonNode ids = obj.get("imageIds");
+        assertTrue(ids.isArray());
         for (int i = 0; i < ids.size(); ++i)
-            assertThat(ids.getString(i), is(TestDataProvider.IMAGE_OWNED_BY_DEFAULT_USER_ID[i]));
+            assertThat(ids.get(i).asText(), is(TestDataProvider.IMAGE_OWNED_BY_DEFAULT_USER_ID[i]));
     }
 
     @Test
@@ -38,12 +39,13 @@ public class GetImagesAPITest extends APIControllerTest {
 
         assertResultOK(proxy);
 
-        JSONObject obj = getJSON(proxy);
+        ObjectNode obj = getJSON(proxy);
 
-        assertThat(obj.getInt("count"), is(10));
-        JSONArray ids = obj.getJSONArray("imageIds");
+        assertThat(obj.get("count").asInt(), is(10));
+        JsonNode ids = obj.get("imageIds");
+        assertTrue(ids.isArray());
         for (int i = 0; i < ids.size(); ++i)
-            assertThat(ids.getString(i), is(TestDataProvider.IMAGE_OWNED_BY_DEFAULT_USER_ID[i]));
+            assertThat(ids.get(i).asText(), is(TestDataProvider.IMAGE_OWNED_BY_DEFAULT_USER_ID[i]));
     }
 
     @Test
@@ -54,12 +56,13 @@ public class GetImagesAPITest extends APIControllerTest {
 
         assertResultOK(proxy);
 
-        JSONObject obj = getJSON(proxy);
+        ObjectNode obj = getJSON(proxy);
 
-        assertThat(obj.getInt("count"), is(10));
-        JSONArray ids = obj.getJSONArray("imageIds");
+        assertThat(obj.get("count").asInt(), is(10));
+        JsonNode ids = obj.get("imageIds");
+        assertTrue(ids.isArray());
         for (int i = 0; i < ids.size(); ++i)
-            assertThat(ids.getString(i), is(TestDataProvider.IMAGE_OWNED_BY_DEFAULT_USER_ID[i]));
+            assertThat(ids.get(i).asText(), is(TestDataProvider.IMAGE_OWNED_BY_DEFAULT_USER_ID[i]));
     }
 
     @Test
@@ -70,11 +73,12 @@ public class GetImagesAPITest extends APIControllerTest {
 
         assertResultOK(proxy);
 
-        JSONObject obj = getJSON(proxy);
+        ObjectNode obj = getJSON(proxy);
 
-        assertThat(obj.getInt("count"), is(10));
-        JSONArray ids = obj.getJSONArray("imageIds");
+        assertThat(obj.get("count").asInt(), is(10));
+        JsonNode ids = obj.get("imageIds");
+        assertTrue(ids.isArray());
         for (int i = 0; i < ids.size(); ++i)
-            assertThat(ids.getString(i), is(TestDataProvider.IMAGE_OWNED_BY_DEFAULT_USER_ID[i + 3]));
+            assertThat(ids.get(i).asText(), is(TestDataProvider.IMAGE_OWNED_BY_DEFAULT_USER_ID[i + 3]));
     }
 }

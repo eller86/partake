@@ -1,10 +1,12 @@
 package in.partake.controller.api.debug;
 
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
+
 import in.partake.base.PartakeException;
 import in.partake.controller.api.AbstractPartakeAPI;
 import in.partake.model.dao.DAOException;
 import in.partake.resource.UserErrorCode;
-import net.sf.json.JSONObject;
 import play.mvc.Result;
 
 public class EchoAPI extends AbstractPartakeAPI {
@@ -28,7 +30,7 @@ public class EchoAPI extends AbstractPartakeAPI {
         if (data == null)
             return renderInvalid(UserErrorCode.INVALID_ARGUMENT);
 
-        JSONObject obj = new JSONObject();
+        ObjectNode obj = new ObjectNode(JsonNodeFactory.instance);
         obj.put("data", data);
 
         return renderOK(obj);

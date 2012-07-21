@@ -17,14 +17,17 @@ import in.partake.model.dto.UserPreference;
 import in.partake.model.dto.auxiliary.ParticipationStatus;
 import in.partake.resource.UserErrorCode;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import play.mvc.Result;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
 
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
+import play.mvc.Result;
 
 public class ApplyAPI extends AbstractPartakeAPI {
 
@@ -63,11 +66,16 @@ public class ApplyAPI extends AbstractPartakeAPI {
     }
 
     private Map<UUID, List<String>> convertToMap(String jsonStr) throws PartakeException {
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            JSONObject map = JSONObject.fromObject(jsonStr);
+            ObjectNode map = mapper.readValue(jsonStr, ObjectNode.class);
             return Util.parseEnqueteAnswers(map);
-        } catch (JSONException e) {
-            throw new PartakeException(UserErrorCode.INVALID_ENQUETE_ANSWERS);
+        } catch (JsonParseException e) {
+            throw new IllegalArgumentException(e);
+        } catch (JsonMappingException e) {
+            throw new IllegalArgumentException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -19,7 +19,10 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import net.sf.json.JSONObject;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
+
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 
@@ -62,14 +65,17 @@ public class CreateImageAPI extends AbstractPartakeAPI {
 
         List<String> imageIds = new CreateImageAPITransaction(user, file, contentType, limit).execute();
 
-        JSONObject obj = new JSONObject();
+        ObjectNode obj = new ObjectNode(JsonNodeFactory.instance);
         obj.put("imageId", imageIds.get(0));
-        obj.put("imageIds", imageIds);
+        ArrayNode imageIdArray = obj.putArray("imageIds");
+        for (String imageId : imageIds) {
+            imageIdArray.add(imageId);
+        }
 
         // We should return text/plain or text/html for MS-IE here.
         // TODO: Should use Accept header instead of this.
         if (optBooleanParameter("ensureTextPlain", false))
-            return renderOKWith(obj, "text/plain");
+            return renderJSONWith(obj, 200, "text/plain");
         else
             return renderOK(obj);
     }

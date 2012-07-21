@@ -13,7 +13,9 @@ import in.partake.model.dto.UserPreference;
 
 import java.util.List;
 
-import net.sf.json.JSONObject;
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
+
 import play.mvc.Result;
 
 public class GetAPI extends AbstractPartakeAPI {
@@ -29,7 +31,7 @@ public class GetAPI extends AbstractPartakeAPI {
         GetAPITransaction transaction = new GetAPITransaction(user.getId());
         transaction.execute();
 
-        JSONObject obj = user.toSafeJSON();
+        ObjectNode obj = new ObjectNode(JsonNodeFactory.instance);
         obj.put("preference", transaction.getPreference().toSafeJSON());
         obj.put("openIds", Util.toJSONArray(transaction.getOpenIds()));
         return renderOK(obj);

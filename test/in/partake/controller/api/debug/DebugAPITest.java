@@ -8,8 +8,8 @@ import in.partake.controller.api.APIControllerTest;
 import in.partake.model.fixture.TestDataProvider;
 import in.partake.resource.ServerErrorCode;
 import in.partake.resource.UserErrorCode;
-import net.sf.json.JSONObject;
 
+import org.codehaus.jackson.node.ObjectNode;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,8 +30,8 @@ public class DebugAPITest extends APIControllerTest {
         proxy.execute();
         assertResultOK(proxy);
 
-        JSONObject obj = getJSON(proxy);
-        Assert.assertEquals("test", obj.get("data"));
+        ObjectNode obj = getJSON(proxy);
+        Assert.assertEquals("test", obj.get("data").asText());
     }
 
     @Test
@@ -42,8 +42,8 @@ public class DebugAPITest extends APIControllerTest {
         proxy.execute();
         assertResultOK(proxy);
 
-        JSONObject obj = getJSON(proxy);
-        Assert.assertEquals("test", obj.get("data"));
+        ObjectNode obj = getJSON(proxy);
+        Assert.assertEquals("test", obj.get("data").asText());
     }
 
     @Test

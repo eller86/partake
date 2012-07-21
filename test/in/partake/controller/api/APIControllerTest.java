@@ -8,9 +8,10 @@ import in.partake.resource.UserErrorCode;
 
 import java.io.IOException;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
 import org.junit.Assert;
 
 import play.test.Helpers;
@@ -39,9 +40,10 @@ public abstract class APIControllerTest extends AbstractPartakeControllerTest {
      * @return
      * @throws IOException
      */
-    protected JSONObject getJSON(ActionProxy proxy) throws Exception {
+    protected ObjectNode getJSON(ActionProxy proxy) throws Exception {
         String str = getJSONString(proxy);
-        return JSONObject.fromObject(str);
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(str, ObjectNode.class);
     }
 
     // ----------------------------------------------------------------------
@@ -49,27 +51,27 @@ public abstract class APIControllerTest extends AbstractPartakeControllerTest {
     protected void assertResultOK(ActionProxy proxy) throws Exception {
         Assert.assertEquals(200, Helpers.status(proxy.getResult()));
 
-        JSONObject obj = getJSON(proxy);
-        assertThat(obj.getString("result"), is("ok"));
+        ObjectNode obj = getJSON(proxy);
+        assertThat(obj.get("result").asText(), is("ok"));
     }
 
     protected void assertResultInvalid(ActionProxy proxy, UserErrorCode ec) throws Exception {
         Assert.assertEquals(400, Helpers.status(proxy.getResult()));
 
-        JSONObject obj = getJSON(proxy);
-        assertThat(obj.getString("result"), is("invalid"));
-        assertThat(obj.getString("reason"), is(ec.getReasonString()));
+        ObjectNode obj = getJSON(proxy);
+        assertThat(obj.get("result").asText(), is("invalid"));
+        assertThat(obj.get("reason").asText(), is(ec.getReasonString()));
     }
 
     protected void assertResultInvalid(ActionProxy proxy, UserErrorCode ec, String additional) throws Exception {
         Assert.assertEquals(400, Helpers.status(proxy.getResult()));
 
-        JSONObject obj = getJSON(proxy);
-        assertThat(obj.getString("result"), is("invalid"));
-        assertThat(obj.getString("reason"), is(ec.getReasonString()));
+        ObjectNode obj = getJSON(proxy);
+        assertThat(obj.get("result").asText(), is("invalid"));
+        assertThat(obj.get("reason").asText(), is(ec.getReasonString()));
 
-        JSONObject additionalObj = obj.getJSONObject("additional");
-        assertThat(additionalObj.containsKey(additional), is(true));
+        JsonNode additionalObj = obj.path("additional");
+        assertThat(additionalObj.has(additional), is(true));
     }
 
 
@@ -80,18 +82,18 @@ public abstract class APIControllerTest extends AbstractPartakeControllerTest {
         Assert.assertNotNull(authenticate);
         Assert.assertTrue(authenticate.contains("OAuth"));
 
-        JSONObject obj = getJSON(proxy);
-        Assert.assertEquals("auth", obj.get("result"));
-        Assert.assertFalse(StringUtils.isBlank((String) obj.get("reason")));
+        ObjectNode obj = getJSON(proxy);
+        Assert.assertThat(obj.get("result").asText(), is("auth"));
+        Assert.assertFalse(StringUtils.isBlank(obj.get("reason").asText()));
     }
 
     protected void assertResultForbidden(ActionProxy proxy) throws Exception {
         // status code should be 403
         Assert.assertEquals(403, Helpers.status(proxy.getResult()));
 
-        JSONObject obj = getJSON(proxy);
-        Assert.assertEquals("forbidden", obj.get("result"));
-        Assert.assertFalse(StringUtils.isBlank((String) obj.get("reason")));
+        ObjectNode obj = getJSON(proxy);
+        Assert.assertThat(obj.get("result").asText(), is("forbidden"));
+        Assert.assertFalse(StringUtils.isBlank(obj.get("reason").asText()));
     }
 
     protected void assertResultForbidden(ActionProxy proxy, UserErrorCode ec) throws Exception {
@@ -99,17 +101,17 @@ public abstract class APIControllerTest extends AbstractPartakeControllerTest {
         // status code should be 403
         Assert.assertEquals(403, Helpers.status(proxy.getResult()));
 
-        JSONObject obj = getJSON(proxy);
+        ObjectNode obj = getJSON(proxy);
         Assert.assertEquals("forbidden", obj.get("result"));
-        Assert.assertFalse(StringUtils.isBlank((String) obj.get("reason")));
+        Assert.assertFalse(StringUtils.isBlank(obj.get("reason").asText()));
         // TODO: Check errorCode here.
     }
 
     protected void assertResultError(ActionProxy proxy, ServerErrorCode ec) throws Exception {
         Assert.assertEquals(500, Helpers.status(proxy.getResult()));
 
-        JSONObject obj = getJSON(proxy);
-        assertThat(obj.getString("result"), is("error"));
-        assertThat(obj.getString("reason"), is(ec.getReasonString()));
+        ObjectNode obj = getJSON(proxy);
+        assertThat(obj.get("result").asText(), is("error"));
+        assertThat(obj.get("reason").asText(), is(ec.getReasonString()));
     }
 }

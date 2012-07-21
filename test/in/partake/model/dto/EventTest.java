@@ -9,8 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
-import net.sf.json.JSONObject;
-
+import org.codehaus.jackson.node.ObjectNode;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -113,8 +112,8 @@ public final class EventTest extends AbstractPartakeModelTest<Event> {
     public void testToJsonWhenBeginDateExistsAndEndDateIsNull() {
         Event event = new Event();
         event.setBeginDate(new DateTime(0L));
-        JSONObject json = event.toSafeJSON();
-        Assert.assertEquals("1970-01-01 09:00", json.getString("beginDate"));
-        Assert.assertFalse(json.containsKey("endDate"));
+        ObjectNode json = event.toSafeJSON();
+        Assert.assertEquals("1970-01-01 09:00", json.get("beginDate").asText());
+        Assert.assertFalse(json.has("endDate"));
     }
 }

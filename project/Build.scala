@@ -25,7 +25,6 @@ object ApplicationBuild extends Build {
         "net.java.dev.rome" % "rome" % "1.0.0",
         "net.java.dev.rome" % "rome-fetcher" % "1.0.0",
         "com.twitter" % "twitter-text" % "1.4.10",
-        "net.sf.json-lib" % "json-lib" % "2.4" classifier "jdk15",
 
         "junit" % "junit" % "4.8.2" % "test",
         "org.mockito" % "mockito-all" % "1.8.1" % "test",

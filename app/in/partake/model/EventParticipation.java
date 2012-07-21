@@ -1,7 +1,9 @@
 package in.partake.model;
 
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
+
 import in.partake.model.dto.Event;
-import net.sf.json.JSONObject;
 
 public class EventParticipation {
     private Event event;
@@ -14,8 +16,8 @@ public class EventParticipation {
         this.numReservedUsers = numReservedUsers;
     }
     
-    public JSONObject toSafeJSON() {
-        JSONObject obj = new JSONObject();
+    public ObjectNode toSafeJSON() {
+        ObjectNode obj = new ObjectNode(JsonNodeFactory.instance);
         obj.put("event", event.toSafeJSON());
         obj.put("numEnrolledUsers", numEnrolledUsers);
         obj.put("numReservedUsers", numReservedUsers);

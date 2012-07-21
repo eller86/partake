@@ -17,11 +17,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
+
+import com.google.common.base.Strings;
 
 public class Event extends PartakeModel<Event> {
     private String id;
@@ -126,55 +129,55 @@ public class Event extends PartakeModel<Event> {
         this.revision = event.revision;
     }
 
-    public Event(JSONObject json) {
-        this.id = json.getString("id");
-        this.title = json.getString("title");
-        this.summary = json.getString("summary");
-        this.category = json.getString("category");
-        if (json.containsKey("beginDate"))
-            this.beginDate = new DateTime(json.getLong("beginDate"));
-        if (json.containsKey("endDate"))
-            this.endDate = new DateTime(json.getLong("endDate"));
-        this.url = json.optString("url", null);
-        this.place = json.optString("place", null);
-        this.address = json.optString("address", null);
-        this.description = json.getString("description");
-        this.hashTag = json.optString("hashTag", null);
-        this.ownerId = json.getString("ownerId");
-        this.foreImageId = json.optString("foreImageId", null);
-        this.backImageId = json.optString("backImageId", null);
-        this.passcode = json.optString("passcode", null);
-        this.draft = json.optBoolean("draft", false);
+    public Event(ObjectNode json) {
+        this.id = json.get("id").asText();
+        this.title = json.get("title").asText();
+        this.summary = json.get("summary").asText();
+        this.category = json.get("category").asText();
+        if (json.has("beginDate"))
+            this.beginDate = new DateTime(json.get("beginDate").asLong());
+        if (json.has("endDate"))
+            this.endDate = new DateTime(json.get("endDate").asLong());
+        this.url = Strings.emptyToNull(json.path("url").asText());
+        this.place = Strings.emptyToNull(json.path("place").asText());
+        this.address = Strings.emptyToNull(json.path("address").asText());
+        this.description = json.get("description").asText();
+        this.hashTag = Strings.emptyToNull(json.path("hashTag").asText());
+        this.ownerId = json.get("ownerId").asText();
+        this.foreImageId = Strings.emptyToNull(json.path("foreImageId").asText());
+        this.backImageId = Strings.emptyToNull(json.path("backImageId").asText());
+        this.passcode = Strings.emptyToNull(json.path("passcode").asText());
+        this.draft = json.path("draft").asBoolean(false);
         {
-            JSONArray ar = json.optJSONArray("editorIds");
-            if (ar != null) {
+            JsonNode ar = json.get("editorIds");
+            if (ar != null && ar.isArray()) {
                 this.editorIds = new ArrayList<String>();
                 for (int i = 0; i < ar.size(); ++i)
-                    editorIds.add(ar.getString(i));
+                    editorIds.add(ar.get(i).asText());
             }
         }
         {
-            JSONArray ar = json.optJSONArray("relatedEventIds");
-            if (ar != null) {
+            JsonNode ar = json.get("relatedEventIds");
+            if (ar != null && ar.isArray()) {
                 this.relatedEventIds = new ArrayList<String>();
                 for (int i = 0; i < ar.size(); ++i)
-                    relatedEventIds.add(ar.getString(i));
+                    relatedEventIds.add(ar.get(i).asText());
             }
         }
         {
-            JSONArray ar = json.optJSONArray("enquetes");
-            if (ar != null) {
+            JsonNode ar = json.get("enquetes");
+            if (ar != null && ar.isArray()) {
                 this.enquetes = new ArrayList<EnqueteQuestion>();
                 for (int i = 0; i < ar.size(); ++i)
-                    enquetes.add(new EnqueteQuestion(ar.getJSONObject(i)));
+                    enquetes.add(new EnqueteQuestion(ar.get(i)));
             }
         }
 
-        if (json.containsKey("createdAt"))
-            this.createdAt = new DateTime(json.getLong("createdAt"));
-        if (json.containsKey("modifiedAt"))
-            this.modifiedAt = new DateTime(json.getLong("modifiedAt"));
-        this.revision = json.optInt("revision", 1);
+        if (json.has("createdAt"))
+            this.createdAt = new DateTime(json.get("createdAt").asLong());
+        if (json.has("modifiedAt"))
+            this.modifiedAt = new DateTime(json.get("modifiedAt").asLong());
+        this.revision = json.path("revision").asInt(1);
     }
 
     public Event(String id, String title, String summary, String category, DateTime beginDate, DateTime endDate,
@@ -223,8 +226,8 @@ public class Event extends PartakeModel<Event> {
      * TODO: All Date should be long instead of Formatted date. However, maybe some clients uses this values... What should we do?
      * Maybe we should take a version number in request query. The version 2 format should obey the rule.
      */
-    public JSONObject toSafeJSON() {
-        JSONObject obj = new JSONObject();
+    public ObjectNode toSafeJSON() {
+        ObjectNode obj = new ObjectNode(JsonNodeFactory.instance);
         obj.put("id", id);
         obj.put("title", title);
         obj.put("summary", summary);
@@ -256,9 +259,9 @@ public class Event extends PartakeModel<Event> {
         obj.put("draft", draft);
 
         if (editorIds != null)
-            obj.put("editorIds", editorIds);
+            obj.putArray("editorIds").addAll(listToJson(editorIds));
         if (relatedEventIds != null)
-            obj.put("relatedEventIds", relatedEventIds);
+            obj.putArray("relatedEventIds").addAll(listToJson(relatedEventIds));
         if (enquetes != null)
             obj.put("enquetes", Util.toJSONArray(enquetes));
 
@@ -275,8 +278,16 @@ public class Event extends PartakeModel<Event> {
         return obj;
     }
 
-    public JSONObject toJSON() {
-        JSONObject obj = new JSONObject();
+    private ArrayNode listToJson(List<String> list) {
+        ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
+        for (String string : list) {
+            result.add(string);
+        }
+        return result;
+    }
+
+	public ObjectNode toJSON() {
+        ObjectNode obj = new ObjectNode(JsonNodeFactory.instance);
         obj.put("id", id);
         obj.put("title", title);
         obj.put("summary", summary);
@@ -299,9 +310,9 @@ public class Event extends PartakeModel<Event> {
         obj.put("draft", draft);
 
         if (editorIds != null)
-            obj.put("editorIds", editorIds);
+            obj.putArray("editorIds").addAll(listToJson(editorIds));
         if (relatedEventIds != null)
-            obj.put("relatedEventIds", relatedEventIds);
+            obj.putArray("relatedEventIds").addAll(listToJson(relatedEventIds));
         if (enquetes != null)
             obj.put("enquetes", Util.toJSONArray(enquetes));
 

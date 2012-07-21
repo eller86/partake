@@ -16,10 +16,10 @@ import in.partake.service.IEventSearchService;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
 
 import play.mvc.Result;
 
@@ -67,11 +67,11 @@ public class SearchAPI extends AbstractPartakeAPI {
 
         List<Event> events = new SearchTransaction(query, category, sortOrder, beforeDeadlineOnly, maxNum).execute();
 
-        JSONArray jsonEventsArray = new JSONArray();
+        ArrayNode jsonEventsArray = new ArrayNode(JsonNodeFactory.instance);
         for (Event event : events)
             jsonEventsArray.add(event.toSafeJSON());
 
-        JSONObject obj = new JSONObject();
+        ObjectNode obj = new ObjectNode(JsonNodeFactory.instance);
         obj.put("events", jsonEventsArray);
         return renderOK(obj);
     }

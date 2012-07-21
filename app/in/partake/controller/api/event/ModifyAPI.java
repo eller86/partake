@@ -31,10 +31,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
 
 import play.mvc.Result;
 
@@ -66,7 +66,7 @@ public class ModifyAPI extends AbstractPartakeAPI {
         else
             searchService.create(event, tickets);
 
-        JSONObject obj = transaction.getJSONObject();
+        ObjectNode obj = transaction.getJSONObject();
         obj.put("eventId", eventId);
         return renderOK(obj);
     }
@@ -79,7 +79,7 @@ class ModifyTransaction extends Transaction<Void> {
 
     private Event event;
     private List<EventTicket> tickets;
-    private JSONObject json;
+    private ObjectNode json;
 
     public ModifyTransaction(UserEx user, String eventId, Map<String, String[]> params) {
         this.user = user;
@@ -88,7 +88,7 @@ class ModifyTransaction extends Transaction<Void> {
 
         // When event information is changed, you can add the editted value here to return to the client.
         // For example, you can filter script tag for event description, and so on.
-        this.json = new JSONObject();
+        this.json = new ObjectNode(JsonNodeFactory.instance);
     }
 
     @Override
@@ -278,7 +278,7 @@ class ModifyTransaction extends Transaction<Void> {
             String[] relatedEventIds = getStrings("relatedEventIds[]");
 
             List<String> eventIds = new ArrayList<String>();
-            JSONArray array = new JSONArray();
+            ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
             for (String relatedEventId : relatedEventIds) {
                 if (!Util.isUUID(relatedEventId))
                     continue;
@@ -297,7 +297,7 @@ class ModifyTransaction extends Transaction<Void> {
 
                 eventIds.add(relatedEventId);
 
-                JSONObject obj = new JSONObject();
+                ObjectNode obj = new ObjectNode(JsonNodeFactory.instance);
                 obj.put("id", relatedEvent.getId());
                 obj.put("title", relatedEvent.getTitle());
                 array.add(obj);
@@ -309,7 +309,7 @@ class ModifyTransaction extends Transaction<Void> {
         }
 
         if (params.containsKey("editorIds[]")) {
-            JSONArray array = new JSONArray();
+            ArrayNode array = new ArrayNode(JsonNodeFactory.instance);
             List<String> editorIds = new ArrayList<String>();
             Set<String> visitedIds = new HashSet<String>();
             for (String editorId : getStrings("editorIds[]")) {
@@ -375,7 +375,7 @@ class ModifyTransaction extends Transaction<Void> {
         return tickets;
     }
 
-    public JSONObject getJSONObject() {
+    public ObjectNode getJSONObject() {
         return json;
     }
 }
