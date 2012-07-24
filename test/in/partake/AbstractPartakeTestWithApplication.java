@@ -20,6 +20,8 @@ public abstract class AbstractPartakeTestWithApplication {
         Map<String, String> map = new HashMap<String, String>();
         map.put("db.default.url", "jdbc:postgresql:partake-test");
         map.put("partake.lucene.indexdir", "/tmp/partake-lucene-test");
+        map.put("db.default.user", "partake");
+        map.put("db.default.password", "partake");
 
         application = Helpers.fakeApplication(map);
         Helpers.start(application);
