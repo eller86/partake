@@ -4,5 +4,5 @@ scala:
 jdk:
   - oraclejdk7
 before_script:
-  - createuser partake -P partake -U postgres --no-superuser --no-createdb --no-createrole
-  - createdb partake-test -U postgres -O partake --no-password
+  - createuser -P partake -U postgres --no-superuser --no-createdb --no-createrole partake
+  - createdb -U postgres -O partake --no-password partake-test
