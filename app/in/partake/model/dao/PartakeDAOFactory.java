@@ -3,6 +3,7 @@ package in.partake.model.dao;
 import in.partake.model.IPartakeDAOs;
 import in.partake.model.dao.access.IAccess;
 import in.partake.model.dao.access.IConfigurationItemAccess;
+import in.partake.model.dao.access.ISystemStatisticAccess;
 import in.partake.model.dao.access.IUserCalendarLinkageAccess;
 import in.partake.model.dao.access.IEventCommentAccess;
 import in.partake.model.dao.access.IUserTicketAccess;
@@ -53,6 +54,7 @@ public abstract class PartakeDAOFactory implements IPartakeDAOs {
 
     private final IUserNotificationAccess userNotificationAccess;
     private final IUserSentMessageAccess userSentMessageAccess;
+    private final ISystemStatisticAccess systemStatisticAccess;
 
     private final List<IAccess<?, ?>> daos;
 
@@ -81,6 +83,7 @@ public abstract class PartakeDAOFactory implements IPartakeDAOs {
         addDao(messageEnvelopeAccess = createMessageEnvelopeAccess());
         addDao(userNotificationAccess = createUserNotificationAccess());
         addDao(userSentMessageAccess = createUserSentMessageAccess());
+        addDao(systemStatisticAccess = createSystemStatisticAccess());
     }
 
     public void initialize(PartakeConnection con) throws DAOException {
@@ -201,6 +204,11 @@ public abstract class PartakeDAOFactory implements IPartakeDAOs {
         return this.userSentMessageAccess;
     }
 
+    @Override
+    public ISystemStatisticAccess getSystemStatisticAccess() {
+        return this.systemStatisticAccess;
+    }
+
     protected abstract IConfigurationItemAccess createConfiguraitonItemAccess();
     protected abstract IUserCalendarLinkageAccess createCalendarLinkageAccess();
     protected abstract IEventCommentAccess createCommentAccess();
@@ -223,4 +231,5 @@ public abstract class PartakeDAOFactory implements IPartakeDAOs {
     protected abstract IMessageEnvelopeAccess createMessageEnvelopeAccess();
     protected abstract IUserNotificationAccess createUserNotificationAccess();
     protected abstract IUserSentMessageAccess createUserSentMessageAccess();
+    protected abstract ISystemStatisticAccess createSystemStatisticAccess();
 }

@@ -14,6 +14,7 @@ import in.partake.resource.ConfigurationKeyConstants;
 import java.util.HashMap;
 import java.util.Map;
 
+// task (daemon) also needs this class. do we need to move this into other package?
 public class AdminCountAccess extends DBAccess<Void> {
     private int countUser;
 

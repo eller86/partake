@@ -11,6 +11,7 @@ import in.partake.model.dao.access.IEventTicketAccess;
 import in.partake.model.dao.access.IEventTicketNotificationAccess;
 import in.partake.model.dao.access.IMessageAccess;
 import in.partake.model.dao.access.IMessageEnvelopeAccess;
+import in.partake.model.dao.access.ISystemStatisticAccess;
 import in.partake.model.dao.access.ITwitterMessageAccess;
 import in.partake.model.dao.access.IUserAccess;
 import in.partake.model.dao.access.IUserCalendarLinkageAccess;
@@ -138,5 +139,10 @@ public class MockDaoFactory extends PartakeDAOFactory {
     @Override
     protected IUserSentMessageAccess createUserSentMessageAccess() {
         return Mockito.mock(IUserSentMessageAccess.class);
+    }
+
+    @Override
+    public ISystemStatisticAccess createSystemStatisticAccess() {
+        return Mockito.mock(ISystemStatisticAccess.class);
     }
 }
