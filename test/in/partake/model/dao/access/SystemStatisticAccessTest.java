@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +37,7 @@ public class SystemStatisticAccessTest extends
 
     @Test
     public void testFindLatest() throws Exception {
+        final AtomicBoolean executed = new AtomicBoolean(false);
         new DBAccess<Void>() {
             @Override
             protected Void doExecute(PartakeConnection con, IPartakeDAOs daos) throws DAOException, PartakeException {
@@ -54,6 +56,7 @@ public class SystemStatisticAccessTest extends
                 access.put(con, old);
                 assertThat(access.findLatest(con), is(newest));
 
+                executed.set(true);
                 return null;
             }
 
@@ -61,5 +64,6 @@ public class SystemStatisticAccessTest extends
                 return new SystemStatistic(UUID.randomUUID(), 0, 0, 0, 0, 0, 0, dateTime);
             }
         }.execute();
+        assertThat(executed.get(), is(true));
     }
 }
