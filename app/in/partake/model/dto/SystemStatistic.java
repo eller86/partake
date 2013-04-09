@@ -1,11 +1,12 @@
 package in.partake.model.dto;
 
 import in.partake.base.DateTime;
-import in.partake.base.TimeUtil;
 
 import java.util.UUID;
 
-import net.sf.json.JSONObject;
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
+
 
 public final class SystemStatistic extends PartakeModel<SystemStatistic> {
 
@@ -31,15 +32,15 @@ public final class SystemStatistic extends PartakeModel<SystemStatistic> {
         this.dateTime = dateTime;
     }
 
-    public SystemStatistic(JSONObject object) {
-        this.id = UUID.fromString(object.getString("id"));
-        this.totalUser = object.getInt("totalUser");
-        this.totalEvent = object.getInt("totalEvent");
-        this.publicEvent = object.getInt("publicEvent");
-        this.privateEvent = object.getInt("privateEvent");
-        this.draftEvent = object.getInt("draftEvent");
-        this.publishedEvent = object.getInt("publishedEvent");
-        this.dateTime = new DateTime(object.getLong("dateTime"));
+    public SystemStatistic(ObjectNode object) {
+        this.id = UUID.fromString(object.get("id").asText());
+        this.totalUser = object.get("totalUser").asInt();
+        this.totalEvent = object.get("totalEvent").asInt();
+        this.publicEvent = object.get("publicEvent").asInt();
+        this.privateEvent = object.get("privateEvent").asInt();
+        this.draftEvent = object.get("draftEvent").asInt();
+        this.publishedEvent = object.get("publishedEvent").asInt();
+        this.dateTime = new DateTime(object.get("dateTime").asLong());
     }
 
     public UUID getId() {
@@ -80,8 +81,8 @@ public final class SystemStatistic extends PartakeModel<SystemStatistic> {
     }
 
     @Override
-    public JSONObject toJSON() {
-        JSONObject object = new JSONObject();
+    public ObjectNode toJSON() {
+        ObjectNode object = new ObjectNode(JsonNodeFactory.instance);
         object.put("id", id.toString());
         object.put("totalUser", totalUser);
         object.put("totalEvent", totalEvent);

@@ -15,7 +15,7 @@ import in.partake.model.dto.SystemStatistic;
 
 import java.util.UUID;
 
-import net.sf.json.JSONObject;
+import org.codehaus.jackson.node.ObjectNode;
 
 public class Postgres9SystemStatisticDao extends Postgres9Dao implements ISystemStatisticAccess {
     private static final String ENTITY_TABLE_NAME = "SystemStatistics";
@@ -102,7 +102,7 @@ public class Postgres9SystemStatisticDao extends Postgres9Dao implements ISystem
 
     private static final class SystemStatisticMapper extends Postgres9EntityDataMapper<SystemStatistic> {
         @Override
-        public SystemStatistic map(JSONObject obj) {
+        public SystemStatistic map(ObjectNode obj) {
             return new SystemStatistic(obj).freeze();
         }
 
