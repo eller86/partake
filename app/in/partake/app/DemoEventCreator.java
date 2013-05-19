@@ -7,7 +7,6 @@ import in.partake.model.IPartakeDAOs;
 import in.partake.model.UserEx;
 import in.partake.model.access.DBAccess;
 import in.partake.model.dao.DAOException;
-import in.partake.model.dao.DataIterator;
 import in.partake.model.dao.PartakeConnection;
 import in.partake.model.dao.access.IUserTwitterLinkAccess;
 import in.partake.model.daofacade.EventDAOFacade;
@@ -38,12 +37,19 @@ final class DemoEventCreator extends DBAccess<Event> {
         }
 
         Logger.info("No demo event found. Try to create...");
-        String ownerId = findOwner(con, daos);
+        String ownerId = daos.getUserAccess().findByScreenName(con, "partakein");
+        User owner;
         if (ownerId == null) {
-            ownerId = createOwner(con, daos);
+            Logger.info("No twitter demo event owner found. Try to create...");
+            owner = createOwner(con, daos);
+        } else {
+            owner = daos.getUserAccess().find(con, ownerId);
+            if (owner == null) {
+                owner = createOwner(con, daos);
+            }
         }
 
-        demoEvent = buildDemoEvent(demoEventId, ownerId);
+        demoEvent = buildDemoEvent(demoEventId, owner.getId());
         EventDAOFacade.createWithSpecifiedId(con, daos, demoEvent);
         EventTicket ticket = EventTicket.createDefaultTicket(daos.getEventTicketAccess().getFreshId(con), demoEventId);
         daos.getEventTicketAccess().put(con, ticket);
@@ -51,29 +57,25 @@ final class DemoEventCreator extends DBAccess<Event> {
         return demoEvent;
     }
 
-    private String findOwner(PartakeConnection con, IPartakeDAOs daos) throws DAOException {
-        DataIterator<User> iterator = daos.getUserAccess().getIterator(con);
-        while (iterator.hasNext()) {
-            User user = iterator.next();
-            if ("partakein".equals(user.getScreenName())) {
-                return user.getId();
-            }
+    private User createOwner(PartakeConnection con, IPartakeDAOs daos) throws DAOException {
+        UserTwitterLink ownerTwitterLinkage = daos.getTwitterLinkageAccess().findByTwitterId(con, AUTHOR_TWITTER_ID);
+        if (ownerTwitterLinkage == null) {
+            Logger.info("No twitter linkage of demo event owner found. Try to create...");
+            ownerTwitterLinkage = createTwitterLinkage(con, daos);
         }
-        return null;
+        UserEx owner = UserDAOFacade.create(con, daos, ownerTwitterLinkage);
+        return owner;
     }
 
-    private String createOwner(PartakeConnection con, IPartakeDAOs daos) throws DAOException {
+    private UserTwitterLink createTwitterLinkage(PartakeConnection con,
+            IPartakeDAOs daos) throws DAOException {
         IUserTwitterLinkAccess twitterLinkageAccess = daos.getTwitterLinkageAccess();
         UUID twitterLinkageId = twitterLinkageAccess.getFreshId(con);
         String userId = daos.getUserAccess().getFreshId(con);
-        UserTwitterLink twitterLinkage = twitterLinkageAccess.findByTwitterId(con, AUTHOR_TWITTER_ID);
-        if (twitterLinkage == null) {
-            twitterLinkage = new UserTwitterLink(twitterLinkageId,
-                    AUTHOR_TWITTER_ID, userId, "partakein", "Partake", null, null, "https://si0.twimg.com/profile_images/1378901095/_.png");
-            twitterLinkageAccess.put(con, twitterLinkage);
-        }
-        UserEx owner = UserDAOFacade.create(con, daos, twitterLinkage);
-        return owner.getId();
+        UserTwitterLink twitterLinkage = new UserTwitterLink(twitterLinkageId,
+                AUTHOR_TWITTER_ID, userId, "partakein", "Partake", null, null, "https://si0.twimg.com/profile_images/1378901095/_.png");
+        twitterLinkageAccess.put(con, twitterLinkage);
+        return twitterLinkage;
     }
 
     private Event buildDemoEvent(String demoEventId, String ownerId) {
