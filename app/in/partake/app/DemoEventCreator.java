@@ -23,9 +23,9 @@ import java.util.UUID;
 
 import play.Logger;
 
-final class DemoEventCreator extends DBAccess<Event> {
+public final class DemoEventCreator extends DBAccess<Event> {
 
-    private static final long AUTHOR_TWITTER_ID = 163779313L;
+    public static final long AUTHOR_TWITTER_ID = 163779313L;
 
     @Override
     protected Event doExecute(PartakeConnection con, IPartakeDAOs daos)

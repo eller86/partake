@@ -1,5 +1,7 @@
 package in.partake.model.fixture;
 
+import in.partake.app.DemoEventCreator;
+
 import java.util.UUID;
 
 public interface TestDataProviderConstants {
@@ -46,7 +48,7 @@ public interface TestDataProviderConstants {
 
     public static final String ADMIN_USER_ID = new UUID(1, 8).toString();
     public static final UUID ADMIN_USER_TWITTER_LINK_ID = new UUID(100, 8);
-    public static final long ADMIN_USER_TWITTER_ID = 8;
+    public static final long ADMIN_USER_TWITTER_ID = DemoEventCreator.AUTHOR_TWITTER_ID;
     public static final String ADMIN_USER_SCREENNAME = "partakein";
 
     public static final String EVENT_OWNER_ID = new UUID(1, 10).toString();
