@@ -18,11 +18,7 @@ public class OpenIDService implements IOpenIDService {
     private ConsumerManager consumerManager;
 
     public OpenIDService() {
-        try {
-            consumerManager = new ConsumerManager();
-        } catch (ConsumerException e) {
-            throw new RuntimeException(e);
-        }
+        consumerManager = new ConsumerManager();
     }
 
     public DiscoveryInformation discover(String identifier) throws OpenIDException {

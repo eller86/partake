@@ -16,10 +16,10 @@ object ApplicationBuild extends Build {
         "commons-lang" % "commons-lang" % "2.6",
         "org.owasp" % "antisamy" % "1.4",
         "ical4j" % "ical4j" % "0.9.20",
-        "org.twitter4j" % "twitter4j-core" % "3.0.3",
+        "org.twitter4j" % "twitter4j-core" % "3.0.4",
         "net.sf.opencsv" % "opencsv" % "2.1",
-        "org.apache.lucene" % "lucene-analyzers" % "3.0.2",
-        "org.openid4java" % "openid4java" % "0.9.5",
+        "org.apache.lucene" % "lucene-analyzers" % "3.0.3",
+        "org.openid4java" % "openid4java" % "0.9.8",
         "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
         "commons-dbcp" % "commons-dbcp" % "1.4",
         "commons-pool" % "commons-pool" % "1.6",
@@ -28,10 +28,10 @@ object ApplicationBuild extends Build {
         "com.twitter" % "twitter-text" % "1.4.10",
 
         // We want to have mockito-all in test scope, however it causes some errors
-        "org.mockito" % "mockito-all" % "1.8.1",
+        "org.mockito" % "mockito-all" % "1.8.5",
 
-        "junit" % "junit" % "4.8.2" % "test",
-        "org.hamcrest" % "hamcrest-all" % "1.1" % "test",
+        "junit" % "junit" % "4.11" % "test",
+        "org.hamcrest" % "hamcrest-all" % "1.3" % "test",
         "org.scalatest" %% "scalatest" % "1.9.2" % "test"
     )
 
