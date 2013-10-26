@@ -627,7 +627,7 @@ public class ModifyAPITest extends APIControllerTest {
         addFormParameter(proxy, "description", Util.randomString(1000 * 1000 + 1));
 
         proxy.execute();
-        assertResultInvalid(proxy, UserErrorCode.INVALID_PARAMETERS, "description");
+        assertRequestIsTooLong(proxy);
     }
 
     // --- hashtag
