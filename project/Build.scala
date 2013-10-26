@@ -27,8 +27,8 @@ object ApplicationBuild extends Build {
         "net.java.dev.rome" % "rome-fetcher" % "1.0.0",
         "com.twitter" % "twitter-text" % "1.4.10",
 
-        // We want to have mockito-all in test scope, however it causes some errors
-        "org.mockito" % "mockito-all" % "1.8.5",
+        // We want to have mockito in test scope, however it causes some errors
+        "org.mockito" % "mockito-core" % "1.8.5",
 
         "junit" % "junit" % "4.11" % "test",
         "org.hamcrest" % "hamcrest-all" % "1.3" % "test",
