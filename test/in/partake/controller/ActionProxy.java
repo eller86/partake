@@ -3,7 +3,7 @@ package in.partake.controller;
 import static play.test.Helpers.GET;
 import static play.test.Helpers.POST;
 import static play.test.Helpers.fakeRequest;
-import static play.test.Helpers.routeAndCall;
+import static play.test.Helpers.route;
 import in.partake.base.Pair;
 import in.partake.controller.base.AbstractPartakeController;
 
@@ -90,7 +90,7 @@ public class ActionProxy {
             FakeRequestOperation.addSession(request, sessions);
         }
 
-        result = routeAndCall(request);
+        result = route(request);
     }
 
     public Result getResult() {
