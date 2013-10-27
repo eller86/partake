@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import twitter4j.TwitterException;
 
 public class PartakeTestApp extends PartakeApp {
+    public static final String URL_TO_THROW_EXCEPTION = "http://www.example.com/throwException";
     protected ITestService testService;
 
     public static ITestService getTestService() {
@@ -38,8 +39,7 @@ public class PartakeTestApp extends PartakeApp {
 
         TwitterLoginInformation mockInfo = mock(TwitterLoginInformation.class);
         Mockito.doReturn(mockInfo).when(twitterService).createLoginInformation(Mockito.anyString());
-        Mockito.doReturn(mockInfo).when(twitterService).createLoginInformation(null);
-        Mockito.doThrow(new TwitterException("MockException")).when(twitterService).createLoginInformation("http://www.example.com/throwException");
+        Mockito.doThrow(new TwitterException("MockException")).when(twitterService).createLoginInformation(URL_TO_THROW_EXCEPTION);
 
         UserTwitterLink twitterLinkage = new UserTwitterLink(
                 TestDataProvider.DEFAULT_TWITTER_LINK_ID, TestDataProvider.DEFAULT_TWITTER_ID, TestDataProvider.DEFAULT_USER_ID,

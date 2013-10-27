@@ -11,7 +11,7 @@ public class LoginByTwitterActionTest extends ActionControllerTest {
     public void testLoginWithOAuthError() throws Exception {
         ActionProxy proxy = getActionProxy(GET, "/auth/loginByTwitter");
 
-        addParameter(proxy, "redirectURL", "http://www.example.com/throwException");
+        addFormParameter(proxy, "redirectURL", "http://www.example.com/throwException");
         proxy.execute();
 
         assertResultError(proxy, ServerErrorCode.TWITTER_OAUTH_ERROR);
