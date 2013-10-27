@@ -77,7 +77,7 @@ public class ActionProxy {
                     map.put(key, value);
                 }
             }
-System.out.println("request is " + map);
+
             request.withFormUrlEncodedBody(map);
         }
 
