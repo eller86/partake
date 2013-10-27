@@ -56,10 +56,6 @@ public abstract class APIControllerTest extends AbstractPartakeControllerTest {
         assertThat(obj.get("result").asText(), is("ok"));
     }
 
-    protected void assertRequestIsTooLong(ActionProxy proxy) throws Exception {
-        Assert.assertEquals(413, Helpers.status(proxy.getResult()));
-    }
-
     protected void assertResultInvalid(ActionProxy proxy, UserErrorCode ec) throws Exception {
         Assert.assertEquals(400, Helpers.status(proxy.getResult()));
         expectBehaveAsApi(proxy.getResult());
