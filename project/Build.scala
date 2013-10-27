@@ -20,7 +20,7 @@ object ApplicationBuild extends Build {
         "org.twitter4j" % "twitter4j-core" % "3.0.4",
         "net.sf.opencsv" % "opencsv" % "2.1",
         "org.apache.lucene" % "lucene-analyzers" % "3.0.2",
-        "org.openid4java" % "openid4java" % "0.9.5",
+        "org.openid4java" % "openid4java" % "0.9.8",
         "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
         "commons-dbcp" % "commons-dbcp" % "1.4",
         "commons-pool" % "commons-pool" % "1.6",
