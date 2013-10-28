@@ -365,7 +365,10 @@
     };
 })();
 
-exports.createPartakeClient = createPartakeClient;
-
-
-
+if (typeof define == "function") {
+    define([], {
+      createPartakeClient: createPartakeClient
+    });
+} else {
+    exports.createPartakeClient = createPartakeClient;
+}

@@ -6,12 +6,6 @@
         <button id="search-button" type="button" class="btn btn-primary span6" style="float: none">Search</button>
     </p>
 </form>
-<script>
-    function doRenderNoResults() {
-        $('#searched-events').hide();
-        $('#searched-events-not-found').fadeIn(500);
-    }
-</script>
 } else {
 <form id="search-form" class="well form-horizontal"><fieldset>
     <div class="control-group">
@@ -46,13 +40,6 @@
         </div>
     </div>
 </fieldset></form>
-
-<script>
-    function doRenderNoResults() {
-        $('#searched-events').hide();
-        $('#searched-events-not-found').fadeIn(500);
-    }
-</script>
 }
 
 <div id="searched-events" class="row" style="position: relative;">
@@ -76,98 +63,3 @@
     @* This is a hack to enable a browser 'back' button. *@
     <textarea id="textareaToSavetemporaryJSON"></textarea>
 </form>
-
-<script>
-$('#searched-events').masonry({
-    itemSelector : '.masonry-box'
-});
-
-function cloneTemplate(newPrefix) {
-    var template = $('#template');
-    var cloned = template.clone(true);
-    cloned.find("[id^=template]").each(function() {
-        var id = $(this).attr('id').replace('template', newPrefix);
-        $(this).attr('id', id);
-    });
-    cloned.attr('id', newPrefix);
-    cloned.show();
-    return cloned;
-}
-
-var idx = 0;
-function render(json) {
-    $('#searched-events').show();
-    $('#searched-events-not-found').hide();
-
-    var events = json.events;
-    $('#searched-events').empty();
-
-    if (events.length == 0) {
-        doRenderNoResults();
-        return;
-    }
-
-    var appended = [];
-    for (var i = 0; i < events.length; ++i) {
-        var prefix = "e" + ++idx;
-        var template = cloneTemplate(prefix);
-        var event = events[i];
-
-        $('#searched-events').append(template);
-        $('#' + prefix + '-image-link').attr('href', '/events/' + event.id);
-        if (event.foreImageId)
-            $('#' + prefix + '-image').attr('src', '/images/thumbnail/' + event.foreImageId);
-        else
-            $('#' + prefix + '-image').attr('src', '@routes.Assets.at("/images/no-image.png")');
-        
-        $('#' + prefix + '-title').attr('href', '/events/' + event.id);
-        $('#' + prefix + '-title').text(event.title);
-        $('#' + prefix + '-summary').text(event.summary);
-        $('#' + prefix + '-date').text(event.beginDateText);
-
-        appended.push(template);
-    }
-
-    $('#searched-events').imagesLoaded(function() {
-        $('#searched-events').masonry('reload');
-    });
-}
-
-function doSearch() {
-    var query = $('#search-term').val();
-    var category = $('#category option:selected').val() || 'all';
-    var sortOrder = $('#sort-order option:selected').val() || 'createdAt';
-    var beforeDeadlineOnly = $('#before-deadline-only').is(':checked');
-
-    partake.event.search(query, category, sortOrder, beforeDeadlineOnly, 30)
-    .done(function(json) {
-        $('#textareaToSavetemporaryJSON').val($.toJSON(json));
-        render(json);
-    })
-    .fail(partake.defaultFailHandler);
-}
-
-$('#search-form').submit(function(e) {
-    doSearch();
-    return false;
-});
-
-$(function() {
-    try {
-        var jsonText = $('#textareaToSavetemporaryJSON').val();
-        if (jsonText == null || jsonText == "") {
-            // No value was saved. We do default search.
-            doSearch();
-            return;
-        }
-
-        var json = $.parseJSON(jsonText);
-        render(json);
-    } catch (e) {
-        if (window.console)
-            console.log(e);
-    }
-});
-
-$('#search-button').click(doSearch);
-</script>
