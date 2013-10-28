@@ -4,7 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    @if(ctx.loginUser != null) {
+    <meta name="partake-user-id" content="@ctx.loginUser.getId()">
+    }
     @additionalHeader
 
     @internal.stylesheet(ctx)
