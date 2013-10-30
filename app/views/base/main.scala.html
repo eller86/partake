@@ -3,12 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="partake-no-image" content="@routes.Assets.at("images/no-image.png")">
+    @if(context.loginUser != null && !context.loginUser.isEmpty) {
+    <meta name="partake-user-id" content="@context.loginUser.get.getId()">
+    }
+    @if(context.sessionToken != null) {
+    <meta name="partake-session-token" content="@context.sessionToken">
+    }
 
     @base.stylesheet()
 
     <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.ico")">
 
-    @base.javascript(context)
     @base.googleCodeSnippet()
     <title>@title - [PARTAKE]</title>
 </head>
