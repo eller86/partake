@@ -43,6 +43,7 @@ object ApplicationBuild extends Build {
         parallelExecution in jacoco.Config := false,
         lessEntryPoints <<= baseDirectory(_ / "app" / "assets" / "stylesheets" / "partake-all.less"),
         requireJs += "partake/index.js",
+        requireJs += "partake/events_search.js",
         coffeescriptOptions := Seq("bare")
     )
 

@@ -6,4 +6,7 @@
 </div>
 @events._search(ctx, false)
 </div></div>
+@helper.requireJs(
+  core = routes.Assets.at("javascripts/require.js").url,
+  module = routes.Assets.at("javascripts/partake/events_search").url)
 }
