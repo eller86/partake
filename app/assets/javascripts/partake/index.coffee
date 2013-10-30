@@ -15,8 +15,10 @@ requirejs.config
     'jquery-ui-timepicker-addon': ['jquery-ui']
     'jquery-ui-datepicker': ['jquery-ui']
     'jquery-ui-timepicker': ['jquery-ui', 'jquery-ui-timepicker-addon']
+    'jquery-json': ['jquery']
+    'jquery-masonry': ['jquery']
 
-require ['jquery', 'user', 'index', 'partake-internal', 'base/header', 'events/search'], ($, user, index, api) ->
+require ['jquery', 'user', 'partake-internal', 'base/header', 'events/search'], ($, user, api) ->
   partake = api.partake
   displayUpcomingEvents = ->
     partake.account.getTickets('upcoming', 0, 10)
