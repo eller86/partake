@@ -1,7 +1,9 @@
 requirejs.config
   paths:
-    'jquery': '../jquery/jquery'
-    'jquery-ui': '../jquery/jquery-ui'
+    'jquery': '../partake/jquery-fixup'
+    'jquery-base': '../jquery/jquery'
+    'jquery-ui': '../partake/jquery-ui-fixup'
+    'jquery-ui-base': '../jquery/jquery-ui'
     'partake-internal': 'partake-internal'
     'bootstrap': '../bootstrap/bootstrap'
     'jquery-json': '../jquery/plugins/jquery-json'
@@ -10,8 +12,10 @@ requirejs.config
     'jquery-ui-timepicker': '../jquery/plugins/jquery-ui-timepicker-ja'
     'jquery-ui-timepicker-addon': '../jquery/plugins/jquery-ui-timepicker-addon'
   shim:
-    'jquery': { exports: 'jQuery' }
-    'jquery-ui': ['jquery']
+    'jquery': ['jquery-base']
+    'jquery-base': { exports: 'jQuery' }
+    'jquery-ui': ['jquery-ui-base']
+    'jquery-ui-base': ['jquery']
     'jquery-ui-timepicker-addon': ['jquery-ui']
     'jquery-ui-datepicker': ['jquery-ui']
     'jquery-ui-timepicker': ['jquery-ui', 'jquery-ui-timepicker-addon']
