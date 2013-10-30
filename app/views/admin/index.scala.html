@@ -38,52 +38,22 @@
         <h2>設定</h2>
             <p>Note: ここに乗っているデータは DB から取得したものであり、configuration file によるものではありません。</p>
             @for(key <- in.partake.resource.ConfigurationKeyConstants.configurationkeySet) {
-                <form class="form-horizontal"><fieldset>
+                <form class="form-horizontal modify-setting" data-key="@key"><fieldset>
                 <div class="control-group">
                     <label class="control-label" for="input-@key">@key</label>
                     <div class="controls">
-                        <input type="hidden" name="sessionToken" value="@ctx.sessionToken()">
                         <input type="text" id="input-@key" class="span8" name="key" value="@if(configurationMap.get(key) != null) { @configurationMap.get(key) }" onclick="return false;">
-                        <input type="button" value="設定" class="btn" onclick="modifySetting($(this).form(), '@key')">
+                        <input type="submit" value="設定" class="btn">
                         <span class="text-info"></span>
                     </div>
                 </div>
                 </fieldset></form>
             }
-            <script>
-            function modifySetting(form, key) {
-                var value = form.find("*[name=key]").val();
-                partake.admin.modifySetting(key, value)
-                .done(function() {
-                    var statusSpan = form.find(".text-info");
-                    $(statusSpan).hide();
-                    $(statusSpan).text('保存しました');
-                    $(statusSpan).fadeIn(500);
-                })
-                .fail(partake.defaultFailHandler);
-            }
-
-            var $recreateIndexForm = $("#recreate-index"),
-                $submitButton = $recreateIndexForm.find("input[type=submit]"),
-                $statusSpan = $recreateIndexForm.find(".text-info");
-            $recreateIndexForm.submit(function(e){
-                var url = $recreateIndexForm.attr("action");
-                e.preventDefault();
-                $submitButton.prop("disabled", true);
-                $.post(url, {
-                    "sessionToken": "@ctx.sessionToken()"
-                })
-                .done(function() {
-                    $statusSpan.hide().text('再作成しました').fadeIn(500);
-                })
-                .fail(partake.defaultFailHandler)
-                .always(function(){
-                    $submitButton.prop("disabled", false);
-                });
-            });
-            </script>
     </div>
 </div>
 
 </div></div>
+@helper.requireJs(
+  core = routes.Assets.at("javascripts/require.js").url,
+  module = routes.Assets.at("javascripts/partake/admin").url)
 }

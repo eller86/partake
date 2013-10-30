@@ -44,6 +44,7 @@ object ApplicationBuild extends Build {
         lessEntryPoints <<= baseDirectory(_ / "app" / "assets" / "stylesheets" / "partake-all.less"),
         requireJs += "partake/default.js",
         requireJs += "partake/index.js",
+        requireJs += "partake/admin.js",
         requireJs += "partake/events_search.js",
         coffeescriptOptions := Seq("bare")
     )
