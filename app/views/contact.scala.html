@@ -15,4 +15,7 @@
 </div>
 
 </div></div>
+@helper.requireJs(
+  core = routes.Assets.at("javascripts/require.js").url,
+  module = routes.Assets.at("javascripts/partake/default").url)
 }
