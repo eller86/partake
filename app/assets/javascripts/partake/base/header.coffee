@@ -1,4 +1,4 @@
-define ['jquery', 'partake-internal', 'user', 'jquery-ui-timepicker'], ($, api, user) ->
+define ['jquery', 'partake-internal', 'user', 'jquery-ui-timepicker', 'bootstrap'], ($, api, user) ->
   partake = api.partake
 
   unless user.isLoggedIn()
