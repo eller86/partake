@@ -12,6 +12,7 @@ requirejs.config
     'jquery-ui-timepicker': '../jquery/plugins/jquery-ui-timepicker-ja'
     'jquery-ui-timepicker-addon': '../jquery/plugins/jquery-ui-timepicker-addon'
   shim:
+    'bootstrap': ['jquery']
     'jquery': ['jquery-base']
     'jquery-base': { exports: 'jQuery' }
     'jquery-ui': ['jquery-ui-base']
