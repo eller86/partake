@@ -137,5 +137,10 @@
 
 })();
 
-exports.createPartakeUIClient = createPartakeUIClient;
-
+if (typeof define == "function") {
+    define([], {
+    	createPartakeUIClient: createPartakeUIClient
+    });
+} else {
+    exports.createPartakeUIClient = createPartakeUIClient;
+}
