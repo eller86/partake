@@ -45,29 +45,8 @@
     </div>
 </div>
 
-<script type="text/javascript">
-function removeAttendant(userId, ticketId) {
-    if (!window.confirm('参加者を削除しようとしています。この操作は取り消せません。削除しますか？'))
-        return;
-
-    partake.ticket.removeAttendant(userId, ticketId)
-    .done(function (json) {
-        location.reload();
-    })
-    .fail(partake.defaultFailHandler);
-}
-
-function changeAttendance(userId, ticketId, status) {
-    var id = ticketId + '-' + userId;
-    partake.ticket.changeAttendance(userId, ticketId, status)
-    .done(function(json) {
-        $("#attendance-status-" + id).html("保存しました");
-    })
-    .fail(function(xhr) {
-        $("#attendance-status-" + id).html("保存時にエラーが発生しました");
-    })
-}
-</script>
-
 </div></div>
+@helper.requireJs(
+  core = routes.Assets.at("javascripts/require.js").url,
+  module = routes.Assets.at("javascripts/partake/show-events-participants").url)
 }

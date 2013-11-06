@@ -57,16 +57,16 @@
 
     @ps.zipWithIndex.map { pWithIndex => @defining(pWithIndex._1) { p =>
     <tr id="attendant-@p.getUserId()">
-        <td>[<a onclick="removeAttendant('@p.getUserId()', '@p.getTicketId().toString()')">&times;</a>]</td>
+        <td>[<a class="remove-participant" data-user-id="@p.getUserId()" data-ticket-id="@p.getTicketId().toString()">&times;</a>]</td>
         <td>@pWithIndex._2</td>
         <td>@p.getUser().getTwitterScreenName()</td>
         <td>@if(ParticipationStatus.ENROLLED.equals(p.getStatus())) { 参加 } else { 仮参加 }</td>
         <td>@p.getComment()</td>
         <td class="print-del">@p.getAppliedAt().toHumanReadableFormat()</td>
         <td class="print-del"><form>
-            <input type="radio" onchange="changeAttendance('@p.getUserId()', '@p.getTicketId().toString()', 'unknown')" name="present-@p.getUserId()" value="unknown" @if(AttendanceStatus.UNKNOWN.equals(p.getAttendanceStatus())) { checked } /> 未選択<br />
-            <input type="radio" onchange="changeAttendance('@p.getUserId()', '@p.getTicketId().toString()', 'present')" name="present-@p.getUserId()" value="present" @if(AttendanceStatus.PRESENT.equals(p.getAttendanceStatus())) { checked } /> 出席
-            <input type="radio" onchange="changeAttendance('@p.getUserId()', '@p.getTicketId().toString()', 'absent')" name="present-@p.getUserId()" value="absent"   @if(AttendanceStatus.ABSENT.equals(p.getAttendanceStatus()))  { checked } /> 欠席<br />
+            <input type="radio" class="change-attendance" data-user-id="@p.getUserId()" data-ticket-id="@p.getTicketId().toString()" name="present-@p.getUserId()" value="unknown" @if(AttendanceStatus.UNKNOWN.equals(p.getAttendanceStatus())) { checked } /> 未選択<br />
+            <input type="radio" class="change-attendance" data-user-id="@p.getUserId()" data-ticket-id="@p.getTicketId().toString()" name="present-@p.getUserId()" value="present" @if(AttendanceStatus.PRESENT.equals(p.getAttendanceStatus())) { checked } /> 出席
+            <input type="radio" class="change-attendance" data-user-id="@p.getUserId()" data-ticket-id="@p.getTicketId().toString()" name="present-@p.getUserId()" value="absent"  @if(AttendanceStatus.ABSENT.equals(p.getAttendanceStatus()))  { checked } /> 欠席<br />
             <span id="attendance-status-@p.getTicketId().toString()-@p.getUserId()"></span>
         </form></td>
         @* Another ticket information if any *@
